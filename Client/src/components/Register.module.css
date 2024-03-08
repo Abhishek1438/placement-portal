@@ -1,0 +1,178 @@
+.loginParentContainer {
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: #ffffffbb;
+  /* background-color: white; */
+  background-color: transparent;
+  background-image: url("https://lh3.googleusercontent.com/p/AF1QipOxPVdpOLW_QnIg-CsEzy_c1kyNiPNlcfv5yja3=s1360-w1360-h1020");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.loginChildContainer {
+  overflow: scroll;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffffc4;
+  /* background-color: white; */
+  color: #131418;
+  border: 2px sloid #fff;
+}
+
+.loginChildContainer .icon {
+  padding-right: 1rem;
+}
+
+.loginChildContainer .welcomeMessage {
+  margin: 2rem 0 0 0;
+}
+
+.loginChildContainer p {
+  margin-top: 0.5rem;
+}
+
+.loginChildContainer form {
+  margin-top: 1rem;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.loginChildContainer label,
+.loginChildContainer .form3 .remarks {
+  font-size: 0.85rem;
+  font-stretch: expanded;
+  font-weight: bold;
+  text-transform: uppercase;
+  /* color: #b9bbbe; */
+  margin-bottom: 0.5rem;
+}
+
+.loginChildContainer form input,
+.loginChildContainer form select {
+  border-radius: 0.2rem;
+  width: 100%;
+  background-color: #ffffffad;
+  border: 1px solid black;
+  outline: none;
+  padding: 0.8rem 0.5rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s;
+}
+
+.error {
+  border-width: 1px 1px 1px 10px !important;
+  border-color: rgb(254, 40, 40) rgb(236, 32, 32) rgb(193, 18, 18)
+    rgb(255, 63, 63) !important;
+}
+
+.loginChildContainer input[type="password"] {
+  margin-bottom: 0.5rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+.checkboxContainer label {
+  font-size: 0.57rem;
+  font-weight: 200;
+  max-width: 35em;
+}
+
+.loginChildContainer form p {
+  text-align: start;
+  line-height: 1rem;
+  font-size: 0.8rem;
+}
+
+.loginChildContainer .alreadyAccount {
+  color: rgb(3, 104, 153);
+  margin: 0.5rem 0;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.loginChildContainer span {
+  color: #00aff4;
+}
+
+.loginChildContainer form button {
+  /* color: #fff; */
+  margin-top: 0.5rem;
+  padding: 0.9rem;
+  width: 100%;
+  border-radius: 0.2rem;
+  border: none;
+  outline: none;
+  background-color: #131418;
+  color: #fff;
+  font-weight: bold;
+}
+
+.loginChildContainer form button:hover {
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.loginChildContainer .form3 label {
+  display: flex;
+  font-weight: 400;
+  font-size: 0.7rem;
+  text-transform: none;
+  width: 100%;
+}
+
+.loginChildContainer .form3 p {
+  width: 90%;
+}
+
+.checkboxContainer {
+  display: flex;
+  gap: 1rem;
+}
+
+.loginChildContainer .checkboxContainer input {
+  margin: 0;
+  width: 1rem;
+}
+
+.loginChildContainer .displayNone {
+  display: none;
+}
+
+.widder {
+  width: 40em !important;
+}
+
+@media only screen and (min-width: 485px) {
+  .loginParentContainer {
+    align-items: center;
+  }
+
+  .loginParentContainer > div {
+    min-width: 30em;
+    min-height: 0;
+    align-items: center;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .loginChildContainer {
+    max-height: 90vh;
+    border-radius: 0.5rem;
+    width: 30em;
+  }
+
+  .loginChildContainer .icon {
+    display: none;
+  }
+}

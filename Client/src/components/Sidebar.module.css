@@ -1,0 +1,188 @@
+.sidebar {
+  background-color: #ffffff;
+  position: relative;
+  top: 0;
+  left: 0;
+  padding: 2rem 1rem;
+  width: 15rem;
+  height: 100vh;
+  transition: 0.5s all;
+  border-right: solid 1px #828282;
+}
+.sidebar .logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.sidebar .logoContainer h2.title {
+  font-size: 31.42px;
+  color: #79a3c5;
+  padding: 0 0 0 1rem;
+}
+.sidebar .burgerContainer {
+  content: "";
+  background-color: #79a3c5;
+  position: absolute;
+  right: -17.5px;
+  top: 7.8260869565rem;
+  width: 35px;
+  height: 35px;
+  border-radius: 2rem;
+  z-index: 1;
+}
+.sidebar .burgerContainer .burgerTrigger {
+  content: "";
+  width: 35px;
+  height: 35px;
+  background-color: red;
+  cursor: pointer;
+  z-index: 6;
+  opacity: 0;
+  position: relative;
+}
+.sidebar .burgerContainer .burgerMenu {
+  content: "";
+  background-color: #79a3c5;
+  position: relative;
+  z-index: 1;
+  width: 20px;
+  height: 3px;
+  border-radius: 2rem;
+  bottom: 17.5px;
+  left: 0.45rem;
+  transition: 0.5s all;
+}
+.sidebar .burgerContainer .burgerMenu::after {
+  content: "";
+  background-color: #ffffff;
+  position: absolute;
+  width: 20px;
+  height: 3px;
+  border-radius: 2rem;
+  top: 0.4rem;
+  transform: translateY(-0.4rem) rotate(45deg);
+  transition: 0.5s all;
+}
+.sidebar .burgerContainer .burgerMenu::before {
+  content: "";
+  background-color: #ffffff;
+  position: absolute;
+  width: 20px;
+  height: 3px;
+  border-radius: 2rem;
+  top: -0.4rem;
+  transform: translateY(0.4rem) rotate(-45deg);
+  transition: 0.5s all;
+}
+.sidebar .burgerContainer::after {
+  content: "";
+  position: absolute;
+  right: 35px;
+  top: 17.5px;
+  z-index: 0;
+  width: 21rem;
+  background-color: #f2f2f2;
+  height: 2px;
+  transition: 0.5s all;
+}
+.sidebar .profileContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 3rem 0 0 0;
+}
+.sidebar .profileContainer img {
+  width: auto;
+  height: 3rem;
+}
+.sidebar .profileContainer .profileContents {
+  padding: 0 0 0 1rem;
+}
+.sidebar .profileContainer .profileContents p.name {
+  padding: 0;
+  margin: 0;
+  font-size: 16.7px;
+  color: #828282;
+  text-transform: capitalize;
+  font-weight: 800;
+}
+.sidebar .profileContainer .profileContents p {
+  padding: 0;
+  margin: 0;
+  font-size: 13.9px;
+  color: #828282;
+  text-transform: lowercase;
+}
+.sidebar .contentsContainer {
+  margin: 2rem 0 0 0;
+}
+.sidebar .contentsContainer ul {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar .contentsContainer ul li {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  margin: 0.75rem 0;
+  padding: 0.75rem 0;
+  width: 100%;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+.sidebar .contentsContainer ul li img {
+  padding: 0 1rem 0 0.5rem;
+}
+.sidebar .contentsContainer ul li a {
+  text-decoration: none;
+  color: #828282;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sidebar .contentsContainer ul li.active {
+  background-color: #f4f9f4;
+}
+.sidebar .contentsContainer ul li.active a {
+  color: #79a3c5;
+}
+.sidebar .contentsContainer ul li:hover {
+  background-color: #f2f2f2;
+  transition: 0.25s;
+}
+
+.sidebar.active {
+  width: 5rem;
+  transition: 0.5s all;
+}
+.sidebar.active .logoContainer.active h2.title {
+  opacity: 0;
+}
+.sidebar.active .burgerContainer.active {
+  transition: 0.5s all;
+}
+.sidebar.active .burgerContainer.active .burgerMenu {
+  background-color: #ffffff;
+  transition: 0.5s all;
+}
+.sidebar.active .burgerContainer.active .burgerMenu::before {
+  transform: translateY(0rem) rotate(0deg);
+  transition: 0.5s all;
+}
+.sidebar.active .burgerContainer.active .burgerMenu::after {
+  transform: translateY(0rem) rotate(0deg);
+  transition: 0.5s all;
+}
+.sidebar.active .profileContainer .profileContents {
+  opacity: 0;
+}
+.sidebar.active .contentsContainer span {
+  opacity: 0;
+} /*# sourceMappingURL=main.css.map */
