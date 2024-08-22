@@ -15,6 +15,7 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: "onTouched" });
+
   const onSubmit = (data) => {
     console.log(data);
     setForm1(false);
@@ -25,8 +26,27 @@ const Register = () => {
     setForm2(false);
     setForm3(true);
   };
-  const form3SubmitHandler = () => {
-    console.log("done");
+  const form3SubmitHandler = async () => {
+    console.log(data);
+    try {
+      const response = await fetch("http://localhost:3000/admin/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      console.log("Data saved successfully:", result);
+      navigate("/success"); // Redirect on successful submission
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
   };
 
   return (

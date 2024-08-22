@@ -5,6 +5,7 @@ const Navbar = () => {
     <>
       <Link to="/register">Register</Link>
       <Link to="/admin">Admin Dashboard</Link>
+      <Link to="/job-notification-form">Job Notification Form</Link>
     </>
   );
 };

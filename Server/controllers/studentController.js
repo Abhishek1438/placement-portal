@@ -21,7 +21,37 @@ exports.login = (req, res) => {
 
 // Controller function for student registration
 exports.register = (req, res) => {
-  // Logic to register a new student
+  const {
+    rollNumber,
+    fullName,
+    branch,
+    email,
+    phoneNumber,
+    tenthCGPA,
+    twelfthCGPA,
+    btechCGPA,
+    ...otherDetails
+  } = req.body;
+
+  // Cross check with Academic Office roll list
+  if (!isInAcademicRollList(rollNumber)) {
+    return res
+      .status(400)
+      .json({ error: "Roll number not found in academic office roll list." });
+  }
+
+  // Check if roll number is already registered for placement
+  if (isRegisteredForPlacement(rollNumber)) {
+    return res
+      .status(400)
+      .json({ error: "Roll number is already registered for placement." });
+  }
+
+  // Insert student data into the database
+  // Implement this logic using your database connection
+
+  // Send success response
+  return res.status(200).json({ message: "Student registered successfully." });
 };
 
 // Controller function for student dashboard

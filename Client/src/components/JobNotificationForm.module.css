@@ -1,0 +1,58 @@
+.container {
+  margin: 2rem;
+  border: 1px solid rgb(211, 211, 211);
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.container h3 {
+  color: rgb(17, 0, 115);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.container input {
+  padding: 0.1rem 0.3rem;
+  width: 100%;
+}
+
+.container p {
+  margin: 0.3rem 0;
+  color: rgb(45, 45, 45);
+}
+
+.container button {
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  padding: 1rem 5rem;
+  margin: 1rem auto;
+  color: white;
+  background-color: rgb(81, 81, 229);
+  font-weight: bold;
+  border-radius: 0.5rem;
+}
+
+.container button:hover {
+  background-color: rgb(37, 37, 135);
+}
+
+@media (min-width: 600px) {
+  .container {
+    margin: 2rem auto;
+    width: 50em;
+  }
+
+  .container form {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .gridSpan2 {
+    grid-column: span 2;
+  }
+
+  .gridSpan4 {
+    grid-column: span 4;
+  }
+}

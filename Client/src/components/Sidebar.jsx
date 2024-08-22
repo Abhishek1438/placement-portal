@@ -53,7 +53,7 @@ const Sidebar = () => {
         ></div>
         <div className={classes.burgerMenu}></div>
       </div>
-      <div
+      {/* <div
         className={
           closeMenu === false
             ? classes.profileContainer
@@ -65,7 +65,7 @@ const Sidebar = () => {
           <p className={classes.name}>Hello, Admin</p>
           <p>admin@gmail.com</p>
         </div>
-      </div>
+      </div> */}
       <div
         className={
           closeMenu === false
@@ -77,7 +77,7 @@ const Sidebar = () => {
           <li className={location.pathname === "/admin" ? classes.active : ""}>
             <Link to="/admin/">
               <img src={Dashboard} alt="dashboard" />
-              <span>dashboard</span>
+              <span>RollList</span>
             </Link>
           </li>
           <li
@@ -85,9 +85,9 @@ const Sidebar = () => {
               location.pathname === "/admin/transactions" ? classes.active : ""
             }
           >
-            <Link to="/admin/transactions">
+            <Link to="/admin/registration">
               <img src={Transactions} alt="transactions" />
-              <span>transactions</span>
+              <span>Registrations</span>
             </Link>
           </li>
           <li
@@ -97,7 +97,7 @@ const Sidebar = () => {
           >
             <Link to="/admin/performance">
               <img src={Performance} alt="Performance" />
-              <span>Statistics</span>
+              <span>Job Notifications</span>
             </Link>
           </li>
           <li
@@ -107,7 +107,7 @@ const Sidebar = () => {
           >
             <Link to="/admin/news">
               <img src={News} alt="News" />
-              <span>news</span>
+              <span>Express of Interests</span>
             </Link>
           </li>
           <li
@@ -117,7 +117,7 @@ const Sidebar = () => {
           >
             <Link to="/admin/settings">
               <img src={Settings} alt="Settings" />
-              <span>settings</span>
+              <span>Placement process</span>
             </Link>
           </li>
           <li
@@ -127,7 +127,7 @@ const Sidebar = () => {
           >
             <Link to="/admin/support">
               <img src={Support} alt="Support" />
-              <span>support</span>
+              <span>Extras</span>
             </Link>
           </li>
         </ul>

@@ -16,3 +16,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.ant-modal-mask {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.1
+  ) !important; /* Adjust the opacity value */
+}
+
+.custom-pagination .ant-pagination {
+  display: flex;
+  justify-content: center;
+}

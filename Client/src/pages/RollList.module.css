@@ -1,0 +1,39 @@
+.container {
+  width: 100%;
+}
+
+.rollList {
+  padding: 0rem 2rem;
+}
+
+.rollList form {
+  display: flex;
+  align-items: center;
+}
+
+.rollList form button {
+  border: none;
+  border-radius: 0.5rem;
+  background-color: rgb(179, 109, 249);
+  font-weight: bold;
+  color: white;
+  padding: 1rem 3rem;
+}
+
+.rollList form button:hover {
+  cursor: pointer;
+  background-color: rgb(163, 72, 255);
+}
+
+.filters {
+  padding: 1rem 2rem;
+  display: flex;
+  gap: 1rem;
+  color: rgb(32, 4, 32);
+  width: 100%;
+}
+
+.filters p:last-child {
+  color: red;
+  margin-left: auto;
+}
