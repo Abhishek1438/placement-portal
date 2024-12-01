@@ -1,10 +1,10 @@
-const mysql = require("../models/mysql");
 const RollList = require("../models/RollList");
 const JobNotification = require("../models/JobNotification");
 const csv = require("csv-parser");
 const fs = require("fs");
 const xlsx = require("xlsx");
 const { sendEmail } = require("../services/emailService");
+const Student = require("../models/Student");
 
 exports.getAllRolls = async (req, res) => {
   try {
@@ -323,25 +323,22 @@ exports.deleteRoll = async (req, res) => {
   }
 };
 
-// Controller function to register a student
-exports.registerStudent = async (req, res) => {
+exports.getAllStudents = async (req, res) => {
   try {
-    const studentData = req.body;
+    // Fetch all student entries from the database
+    const studentList = await Student.findAll();
 
-    // Validate and sanitize data if necessary
-
-    // Save to database
-    const newStudent = await Student.create(studentData);
-
-    res.status(201).json({
-      message: "Student registered successfully",
-      student: newStudent,
+    // Send a response with the retrieved data
+    res.status(200).json({
+      message: "Student list fetched successfully.",
+      data: studentList,
     });
   } catch (error) {
-    console.error("Error saving student data:", error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while saving student data", error });
+    console.error("Error fetching the student list:", error);
+    res.status(500).json({
+      message: "An error occurred while fetching the student list.",
+      error,
+    });
   }
 };
 
@@ -409,6 +406,25 @@ exports.createJobNotification = async (req, res) => {
   }
 };
 
+exports.getAllJobNotifications = async (req, res) => {
+  try {
+    // Fetch all job notification entries from the database
+    const jobNotifications = await JobNotification.findAll();
+
+    // Send a response with the retrieved data
+    res.status(200).json({
+      message: "Job notifications fetched successfully.",
+      data: jobNotifications,
+    });
+  } catch (error) {
+    console.error("Error fetching the job notifications:", error);
+    res.status(500).json({
+      message: "An error occurred while fetching the job notifications.",
+      error,
+    });
+  }
+};
+
 exports.sendMail = async (req, res) => {
   const { to, subject, text, html } = req.body;
 
@@ -417,5 +433,115 @@ exports.sendMail = async (req, res) => {
     res.status(200).send("Email sent successfully");
   } catch (error) {
     res.status(500).send("Error sending email");
+  }
+};
+
+const Admin = require("../models/admin");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+// Admin Login
+exports.adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+  console.log(req.body);
+  try {
+    const admin = await Admin.findOne({ where: { email } });
+    if (!admin) return res.status(401).json({ message: "Invalid credentials" });
+
+    const isValidPassword = await bcrypt.compare(password, admin.password);
+    if (!isValidPassword)
+      return res.status(401).json({ message: "Invalid credentials" });
+
+    const token = jwt.sign({ id: admin.id, role: "admin" }, "your_secret_key", {
+      expiresIn: "1d",
+    });
+    res.cookie("token", token, { httpOnly: true, secure: true });
+    res.status(200).json({ message: "Logged in successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Add Admin
+exports.addAdmin = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await Admin.create({ email, password: hashedPassword });
+    res.status(201).json({ message: "Admin added successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Change Password
+exports.changePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  try {
+    const admin = await Admin.findByPk(req.user.id);
+    if (!admin) return res.status(404).json({ message: "User not found" });
+
+    const isValidPassword = await bcrypt.compare(oldPassword, admin.password);
+    if (!isValidPassword)
+      return res.status(400).json({ message: "Incorrect old password" });
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await admin.update({ password: hashedPassword });
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.sendPlacementProcess = async (req, res) => {
+  const { company, process, date, time, venue, additionalInfo, recipients } =
+    req.body;
+
+  // Validate request data
+  if (
+    !company ||
+    !process ||
+    !date ||
+    !time ||
+    !venue ||
+    !recipients ||
+    !recipients.length
+  ) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  try {
+    // Format email content
+    const subject = `Placement Process Details - ${company}`;
+    const html = `
+      <h2>Placement Process Details</h2>
+      <p><strong>Company:</strong> ${company}</p>
+      <p><strong>Process:</strong> ${process.join(", ")}</p>
+      <p><strong>Date:</strong> ${date}</p>
+      <p><strong>Time:</strong> ${time}</p>
+      <p><strong>Venue:</strong> ${venue}</p>
+      <p><strong>Additional Information:</strong> ${additionalInfo || "N/A"}</p>
+    `;
+    const text = `
+      Placement Process Details
+      Company: ${company}
+      Process: ${process.join(", ")}
+      Date: ${date}
+      Time: ${time}
+      Venue: ${venue}
+      Additional Information: ${additionalInfo || "N/A"}
+    `;
+
+    // Send emails to all recipients
+    for (const recipient of recipients) {
+      await sendEmail(recipient, subject, text, html);
+    }
+
+    res.status(200).json({ message: "Emails sent successfully" });
+  } catch (error) {
+    console.error("Error sending emails:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to send emails", error: error.message });
   }
 };

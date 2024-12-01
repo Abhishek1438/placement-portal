@@ -1,39 +1,105 @@
+/* Ensure the container takes full width of the viewport */
 .container {
   width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Improve spacing inside the rollList section */
 .rollList {
-  padding: 0rem 2rem;
+  padding: 0 2rem;
 }
 
+/* Style for errors */
+.error {
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Table styling: Ensure full width and proper alignment */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #e6f7ff;
+}
+
+td {
+  font-size: 14px;
+  word-wrap: break-word; /* Ensure long text wraps nicely */
+}
+
+/* Ensure form elements and filters fit within the container */
 .rollList form {
   display: flex;
   align-items: center;
+  margin-top: 20px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .rollList form button {
   border: none;
-  border-radius: 0.5rem;
-  background-color: rgb(179, 109, 249);
-  font-weight: bold;
+  border-radius: 5px;
+  background-color: #007bff;
   color: white;
-  padding: 1rem 3rem;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .rollList form button:hover {
   cursor: pointer;
-  background-color: rgb(163, 72, 255);
+  background-color: #0056b3;
 }
 
 .filters {
-  padding: 1rem 2rem;
   display: flex;
-  gap: 1rem;
-  color: rgb(32, 4, 32);
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
   width: 100%;
 }
 
 .filters p:last-child {
   color: red;
   margin-left: auto;
+}
+
+/* Ensure responsiveness */
+@media (max-width: 768px) {
+  th,
+  td {
+    font-size: 12px;
+    padding: 10px;
+  }
 }

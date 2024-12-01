@@ -50,7 +50,7 @@ const JobNotificationForm = () => {
       );
 
       const result = await response.json();
-      console.log("Success:", result);
+      // console.log("Success:", result);
 
       // Optionally, you can clear the form or handle success here
       setFormData({

@@ -22,13 +22,37 @@ router.delete("/deleteRoll/:rollNumber", adminController.deleteRoll);
 
 router.post("/mail", adminController.sendMail);
 
-router.post("/register", adminController.registerStudent);
+router.get("/allStudents", adminController.getAllStudents);
 
 // Route to cross-check with the Roll List from Academic Office
 // router.get("/crosscheck", adminController.crossCheck);
 
 // Route to handle job notification form
+router.get("/jobnotification", adminController.getAllJobNotifications);
 router.post("/jobnotification", adminController.createJobNotification);
-module.exports = router;
+
+router.post("/sendPlacementEmails", adminController.sendPlacementProcess);
 
 // const express = require('express');
+
+// For authentication
+const {
+  authenticateToken,
+  authorizeAdmin,
+} = require("../middlewares/authMiddleware");
+
+router.post("/login", adminController.adminLogin);
+router.post(
+  "/add",
+  authenticateToken,
+  authorizeAdmin,
+  adminController.addAdmin
+);
+router.post(
+  "/change-password",
+  authenticateToken,
+  authorizeAdmin,
+  adminController.changePassword
+);
+
+module.exports = router;

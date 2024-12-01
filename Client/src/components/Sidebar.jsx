@@ -10,6 +10,7 @@ import Support from "../Images/support.svg";
 import { useLocation } from "react-router-dom";
 import classes from "./Sidebar.module.css";
 import { Link } from "react-router-dom";
+import { LineChartOutlined } from "@ant-design/icons";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -82,41 +83,47 @@ const Sidebar = () => {
           </li>
           <li
             className={
-              location.pathname === "/admin/transactions" ? classes.active : ""
+              location.pathname === "/admin/registration" ? classes.active : ""
             }
           >
             <Link to="/admin/registration">
-              <img src={Transactions} alt="transactions" />
+              <img src={Transactions} alt="registration" />
               <span>Registrations</span>
             </Link>
           </li>
           <li
             className={
-              location.pathname === "/admin/performance" ? classes.active : ""
+              location.pathname === "/admin/job-notification"
+                ? classes.active
+                : ""
             }
           >
-            <Link to="/admin/performance">
-              <img src={Performance} alt="Performance" />
+            <Link to="/admin/job-notification">
+              <img src={Performance} alt="job-notification" />
               <span>Job Notifications</span>
             </Link>
           </li>
           <li
             className={
-              location.pathname === "/admin/news" ? classes.active : ""
+              location.pathname === "/admin/express-of-interest"
+                ? classes.active
+                : ""
             }
           >
-            <Link to="/admin/news">
-              <img src={News} alt="News" />
+            <Link to="/admin/express-of-interest">
+              <img src={News} alt="express-of-interest" />
               <span>Express of Interests</span>
             </Link>
           </li>
           <li
             className={
-              location.pathname === "/admin/settings" ? classes.active : ""
+              location.pathname === "/admin/placement-process"
+                ? classes.active
+                : ""
             }
           >
-            <Link to="/admin/settings">
-              <img src={Settings} alt="Settings" />
+            <Link to="/admin/placement-process">
+              <img src={Settings} alt="placement-process" />
               <span>Placement process</span>
             </Link>
           </li>
@@ -125,9 +132,9 @@ const Sidebar = () => {
               location.pathname === "/admin/support" ? classes.active : ""
             }
           >
-            <Link to="/admin/support">
-              <img src={Support} alt="Support" />
-              <span>Extras</span>
+            <Link to="/admin/placement-stats">
+              <LineChartOutlined style={{ marginRight: "10px" }} />
+              <span>Placement-Stats</span>
             </Link>
           </li>
         </ul>

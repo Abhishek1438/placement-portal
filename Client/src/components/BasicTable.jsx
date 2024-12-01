@@ -1,34 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { Button, Space, Table, Modal, Form, Input, notification } from "antd";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Button,
+  Space,
+  Table,
+  Modal,
+  Form,
+  Input,
+  notification,
+  Card,
+  Typography,
+} from "antd";
+import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+
+const { Title } = Typography;
 
 const BasicTable = ({ data, setIsUpdated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // New state for add user modal
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [form] = Form.useForm();
   const [updateModalform] = Form.useForm();
-  const [addModalform] = Form.useForm(); // Form for add user
+  const [addModalform] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [UpdateModalLoading, setIsUpdateModalLoading] = useState(false);
-  const [AddModalLoading, setIsAddModalLoading] = useState(false); // Loading state for add user
-  const [selectedUser, setSelectedUser] = useState({});
-  const [searchText, setSearchText] = useState(""); // New state for search query
+  const [updateModalLoading, setUpdateModalLoading] = useState(false);
+  const [addModalLoading, setAddModalLoading] = useState(false);
+  const [selectedUser, setSelectedUser] = useState();
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    form.setFieldsValue({
-      email: selectedUser?.email,
-    });
-    updateModalform.setFieldsValue(selectedUser);
+    if (selectedUser) {
+      form.setFieldsValue({ email: selectedUser.email });
+      updateModalform.setFieldsValue(selectedUser);
+    }
   }, [form, selectedUser, updateModalform]);
 
-  const handleSearch = (value) => {
+  const handleSearch = useCallback((value) => {
     setSearchText(value.toLowerCase());
-  };
+  }, []);
 
   const filteredData = data?.filter((item) => {
     const searchValue = searchText.toLowerCase();
     return (
-      item.rollNumber.toString().toLowerCase().includes(searchValue) || // Convert to string and then to lower case
+      item.rollNumber.toString().toLowerCase().includes(searchValue) ||
       item.name.toLowerCase().includes(searchValue) ||
       item.email.toLowerCase().includes(searchValue) ||
       item.cgpa.toString().toLowerCase().includes(searchValue) ||
@@ -36,16 +49,17 @@ const BasicTable = ({ data, setIsUpdated }) => {
     );
   });
 
-  const showModal = () => {
+  const showModal = (user) => {
+    setSelectedUser(user);
     setIsModalOpen(true);
   };
 
-  const showUpdateModal = () => {
+  const showUpdateModal = (user) => {
+    setSelectedUser(user);
     setIsUpdateModalOpen(true);
   };
 
   const showAddModal = () => {
-    // Function to show add user modal
     setIsAddModalOpen(true);
   };
 
@@ -53,12 +67,11 @@ const BasicTable = ({ data, setIsUpdated }) => {
     try {
       const values = await form.validateFields();
       setLoading(true);
+      console.log("heey");
 
       const response = await fetch("http://localhost:3000/admin/mail", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: values.email,
           subject: "test",
@@ -66,15 +79,13 @@ const BasicTable = ({ data, setIsUpdated }) => {
         }),
       });
 
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error(`HTTP error! Status: ${response.status}`);
-      }
 
       notification.success({
         message: "Mail Sent",
         description: "The mail was sent successfully!",
       });
-
       form.resetFields();
       setIsModalOpen(false);
     } catch (error) {
@@ -88,20 +99,15 @@ const BasicTable = ({ data, setIsUpdated }) => {
   };
 
   const handleUpdateModalOk = async () => {
-    const values = await updateModalform.validateFields();
-    setIsUpdateModalLoading(true);
-    // values.rollNumber = values.rollNumber.toUpperCase;
-    // values.name = values.name.toUpperCase;
-    // values.branch = values.branch.toUpperCase;
-
     try {
+      const values = await updateModalform.validateFields();
+      setUpdateModalLoading(true);
+
       const response = await fetch(
-        `http://localhost:3000/admin/updateRoll/${selectedUser.rollNumber}`,
+        `http://localhost:3000/admin/updateRoll/${selectedUser?.rollNumber}`,
         {
-          method: "Put",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(values),
         }
       );
@@ -130,22 +136,18 @@ const BasicTable = ({ data, setIsUpdated }) => {
         description: "An error occurred while updating the student data.",
       });
     } finally {
-      setIsUpdateModalLoading(false);
+      setUpdateModalLoading(false);
     }
   };
 
   const handleAddModalOk = async () => {
-    // Function to handle add user modal submission
-    const values = await addModalform.validateFields();
-    setIsAddModalLoading(true);
-
     try {
+      const values = await addModalform.validateFields();
+      setAddModalLoading(true);
+
       const response = await fetch("http://localhost:3000/admin/addRoll", {
-        // API endpoint for adding user
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
 
@@ -173,21 +175,8 @@ const BasicTable = ({ data, setIsUpdated }) => {
         description: "An error occurred while adding the student data.",
       });
     } finally {
-      setIsAddModalLoading(false);
+      setAddModalLoading(false);
     }
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleUpdateModalCancel = () => {
-    setIsUpdateModalOpen(false);
-  };
-
-  const handleAddModalCancel = () => {
-    // Function to handle add user modal cancel
-    setIsAddModalOpen(false);
   };
 
   const handleDelete = async (rollNumber) => {
@@ -196,9 +185,7 @@ const BasicTable = ({ data, setIsUpdated }) => {
         `http://localhost:3000/admin/deleteRoll/${rollNumber}`,
         {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
@@ -227,42 +214,19 @@ const BasicTable = ({ data, setIsUpdated }) => {
   };
 
   const columns = [
-    {
-      title: "Roll Number",
-      dataIndex: "rollNumber",
-      key: "rollNumber",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "rollNumber",
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "CGPA",
-      dataIndex: "cgpa",
-      key: "rollNumber",
-      render: (text) => <p>{text}</p>,
-    },
-    {
-      title: "Branch",
-      dataIndex: "branch",
-      key: "rollNumber",
-      render: (text) => <p>{text}</p>,
-    },
+    { title: "Roll Number", dataIndex: "rollNumber", key: "rollNumber" },
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Email", dataIndex: "email", key: "email" },
+    { title: "CGPA", dataIndex: "cgpa", key: "cgpa" },
+    { title: "Branch", dataIndex: "branch", key: "branch" },
     {
       title: "Errors",
       dataIndex: "error",
-      key: "rollNumber",
+      key: "error",
       render: (error) => (
-        <p>
-          {error ? <span style={{ color: "red" }}>{error}</span> : "No error"}
-        </p>
+        <span style={{ color: error ? "red" : "green" }}>
+          {error || "No error"}
+        </span>
       ),
     },
     {
@@ -271,31 +235,14 @@ const BasicTable = ({ data, setIsUpdated }) => {
       render: (_, record) => (
         <Space size="middle">
           {record.error && (
-            <Button
-              type="primary"
-              onClick={() => {
-                setSelectedUser(record);
-                showModal();
-              }}
-            >
+            <Button type="primary" onClick={() => showModal(record)}>
               Send Mail
             </Button>
           )}
-          <Button
-            type="primary"
-            onClick={() => {
-              setSelectedUser(record);
-              showUpdateModal();
-            }}
-          >
+          <Button type="default" onClick={() => showUpdateModal(record)}>
             Update
           </Button>
-          <Button
-            danger
-            onClick={() => {
-              handleDelete(record.rollNumber);
-            }}
-          >
+          <Button danger onClick={() => handleDelete(record.rollNumber)}>
             Delete
           </Button>
         </Space>
@@ -303,180 +250,173 @@ const BasicTable = ({ data, setIsUpdated }) => {
     },
   ];
 
-  data?.sort((a, b) => {
+  const sortedData = [...(filteredData || [])].sort((a, b) => {
     if (a.error && !b.error) return -1;
     if (!a.error && b.error) return 1;
     return 0;
   });
 
-  const paginationConfig = {
-    defaultPageSize: 4,
-    pageSizeOptions: [4, 10, 20, 30, 50],
-  };
-
   return (
-    <>
-      <Space style={{ marginBottom: 16 }}>
-        <Input.Search
-          placeholder="Search..."
-          onSearch={handleSearch}
-          style={{ width: 200 }}
+    <Card>
+      <Space direction="vertical" size="large" style={{ width: "100%" }}>
+        <Title level={2}>Student Management System</Title>
+        <Space>
+          <Input.Search
+            placeholder="Search..."
+            onSearch={handleSearch}
+            style={{ width: 300 }}
+            prefix={<SearchOutlined />}
+          />
+          <Button type="primary" icon={<PlusOutlined />} onClick={showAddModal}>
+            Add User
+          </Button>
+        </Space>
+        <Table
+          columns={columns}
+          dataSource={sortedData}
+          pagination={{
+            defaultPageSize: 4,
+            pageSizeOptions: [4, 10, 20, 30, 50],
+          }}
+          className="custom-table"
         />
-        <Button type="primary" onClick={showAddModal}>
-          Add User
-        </Button>
       </Space>
-      {selectedUser && (
-        <Modal
-          title="Send Mail"
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          okText="Send"
-          confirmLoading={loading}
-        >
-          <Form form={form} layout="vertical">
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[
-                {
-                  required: true,
-                  type: "email",
-                  message: "Please input a valid email!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Form>
-        </Modal>
-      )}
-      {selectedUser && (
-        <Modal
-          title="Update Student Data"
-          open={isUpdateModalOpen}
-          onOk={handleUpdateModalOk}
-          onCancel={handleUpdateModalCancel}
-          okText="Update"
-          confirmLoading={UpdateModalLoading}
-        >
-          <Form form={updateModalform} layout="vertical">
-            <Form.Item
-              name="rollNumber"
-              label="Roll Number"
-              rules={[
-                { required: true, message: "Please input the roll number!" },
-              ]}
-              style={{ textTransform: "uppercase" }}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="name"
-              label="Name"
-              rules={[{ required: true, message: "Please input the name!" }]}
-              style={{ textTransform: "uppercase" }}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[
-                {
-                  required: true,
-                  type: "email",
-                  message: "Please input the email!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="branch"
-              label="Branch"
-              rules={[{ required: true, message: "Please input the branch!" }]}
-              style={{ textTransform: "uppercase" }}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="cgpa"
-              label="CGPA"
-              rules={[{ required: true, message: "Please input the CGPA!" }]}
-            >
-              <Input />
-            </Form.Item>
-          </Form>
-        </Modal>
-      )}
-      {selectedUser && (
-        <Modal
-          title="Add New User"
-          open={isAddModalOpen}
-          onOk={handleAddModalOk}
-          onCancel={handleAddModalCancel}
-          okText="Add"
-          confirmLoading={AddModalLoading}
-        >
-          <Form form={addModalform} layout="vertical">
-            <Form.Item
-              name="rollNumber"
-              label="Roll Number"
-              rules={[
-                { required: true, message: "Please input the roll number!" },
-              ]}
-              style={{ textTransform: "uppercase" }}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="name"
-              label="Name"
-              rules={[{ required: true, message: "Please input the name!" }]}
-              style={{ textTransform: "uppercase" }}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[
-                {
-                  required: true,
-                  type: "email",
-                  message: "Please input the email!",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="branch"
-              label="Branch"
-              rules={[{ required: true, message: "Please input the branch!" }]}
-              style={{ textTransform: "uppercase" }}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="cgpa"
-              label="CGPA"
-              rules={[{ required: true, message: "Please input the CGPA!" }]}
-            >
-              <Input />
-            </Form.Item>
-          </Form>
-        </Modal>
-      )}
-      <Table
-        columns={columns}
-        dataSource={filteredData}
-        pagination={paginationConfig}
-        className="custom-pagination"
-      />
-    </>
+
+      <Modal
+        title="Send Mail"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={() => setIsModalOpen(false)}
+        okText="Send"
+        confirmLoading={loading}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              {
+                required: true,
+                type: "email",
+                message: "Please input a valid email!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal
+        title="Update Student Data"
+        open={isUpdateModalOpen}
+        onOk={handleUpdateModalOk}
+        onCancel={() => setIsUpdateModalOpen(false)}
+        okText="Update"
+        confirmLoading={updateModalLoading}
+      >
+        <Form form={updateModalform} layout="vertical">
+          <Form.Item
+            name="rollNumber"
+            label="Roll Number"
+            rules={[
+              { required: true, message: "Please input the roll number!" },
+            ]}
+          >
+            <Input style={{ textTransform: "uppercase" }} />
+          </Form.Item>
+          <Form.Item
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: "Please input the name!" }]}
+          >
+            <Input style={{ textTransform: "uppercase" }} />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              {
+                required: true,
+                type: "email",
+                message: "Please input the email!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="branch"
+            label="Branch"
+            rules={[{ required: true, message: "Please input the branch!" }]}
+          >
+            <Input style={{ textTransform: "uppercase" }} />
+          </Form.Item>
+          <Form.Item
+            name="cgpa"
+            label="CGPA"
+            rules={[{ required: true, message: "Please input the CGPA!" }]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal
+        title="Add New User"
+        open={isAddModalOpen}
+        onOk={handleAddModalOk}
+        onCancel={() => setIsAddModalOpen(false)}
+        okText="Add"
+        confirmLoading={addModalLoading}
+      >
+        <Form form={addModalform} layout="vertical">
+          <Form.Item
+            name="rollNumber"
+            label="Roll Number"
+            rules={[
+              { required: true, message: "Please input the roll number!" },
+            ]}
+          >
+            <Input style={{ textTransform: "uppercase" }} />
+          </Form.Item>
+          <Form.Item
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: "Please input the name!" }]}
+          >
+            <Input style={{ textTransform: "uppercase" }} />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              {
+                required: true,
+                type: "email",
+                message: "Please input the email!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="branch"
+            label="Branch"
+            rules={[{ required: true, message: "Please input the branch!" }]}
+          >
+            <Input style={{ textTransform: "uppercase" }} />
+          </Form.Item>
+          <Form.Item
+            name="cgpa"
+            label="CGPA"
+            rules={[{ required: true, message: "Please input the CGPA!" }]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+    </Card>
   );
 };
 

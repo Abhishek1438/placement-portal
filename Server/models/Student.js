@@ -5,12 +5,17 @@ const sequelize = require("../config/database"); // Adjust path to your sequeliz
 const Student = sequelize.define(
   "Student",
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     RollNo: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
       validate: {
-        is: /^S(?:20[2-4][1-9]|204[0-0])00[1-3]0[0-9]{3}$/,
+        is: /^S(?:20[1-4][1-9]|204[0-0])00[1-3]0[0-9]{3}$/,
       },
     },
     name: {
@@ -22,8 +27,12 @@ const Student = sequelize.define(
       allowNull: false,
       validate: {
         isEmail: true,
-        is: /^[a-zA-Z]+\.[a-zA-Z]{1}[2-4][0-9]@(?:iiits\.in|IIITS\.IN)$/,
+        is: /^[a-zA-Z]+\.[a-zA-Z]{1}[1-9][0-9]@(?:iiits\.in|IIITS\.IN)$/,
       },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     phoneNo: {
       type: DataTypes.STRING,
@@ -52,7 +61,7 @@ const Student = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lorOpt: {
+    lor: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -64,12 +73,9 @@ const Student = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    eligibilityQuestions: {
-      type: DataTypes.JSONB,
+    allAgree: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
   },
   {
